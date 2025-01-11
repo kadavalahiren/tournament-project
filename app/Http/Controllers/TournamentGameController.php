@@ -26,7 +26,9 @@ class TournamentGameController extends Controller
         }
 
         $rounds = $this->generateTournamentRounds($users); // call the function
-        return view('tournament.show',compact('rounds'));
+
+        $finalWinner = $users[0];
+        return view('tournament.show',compact('rounds','finalWinner'));
     }
 
     public function generateTournamentRounds(array $users)
@@ -48,7 +50,11 @@ class TournamentGameController extends Controller
                 $winners[] = array_shift($users);
             }
 
-            $rounds[] = $groups;
+            $rounds[] = [
+                'groups' => $groups,
+                'winners' => $winners,
+            ];
+
             $users = $winners; // Winners proceed to the next round
         }
         return $rounds;
